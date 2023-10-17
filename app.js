@@ -13,7 +13,14 @@ app.disable('x-powered-by')
 app.use(express.json())
 
 app.get('/', (req, res) => {
-    res.end('Hello World')
+    const { genre } = req.query
+
+    if (genre) {
+        const moviesFilteres = movies.filter(movie => movie.genre.some(g => g.toLowerCase() === genre.toLowerCase()))
+        res.json(moviesFilteres)
+    } else {
+        res.json(movies)
+    }
 })
 
 app.post('/movies', (req, res) => {
@@ -34,7 +41,6 @@ app.post('/movies', (req, res) => {
 })
 
 app.get('/movies', (req, res) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:8800')
 
     const { genre } = req.query
 
